@@ -134,3 +134,15 @@ Registered backend actions may be implemented in Python, but they must be expose
 Runtime v1.0 supports custom actions as executable statements. It parses `return`, but returned values are not yet consumable inside expressions such as `remember result as action with value`. That belongs to a future release.
 
 INTENTO v1.0 is the first complete experimental baseline. The next work should focus on improving correctness, adding missing language primitives carefully, and keeping the Runtime small, readable, and safe.
+
+## Copyright and Licensing
+
+The INTENTO Runtime source code is released under the MIT License. See `LICENSE`.
+
+The official INTENTO manual and documentation assets in the `manual/` directory are protected by copyright:
+
+**Copyright © 2026 Alessandro Bertelli. All rights reserved.**
+
+The manual may be downloaded and read for personal, educational, and evaluation purposes, but it may not be sold, republished, modified, translated, redistributed, or used to create derivative works without written permission.
+
+INTENTO Runtime v1.0 is an experimental prototype and is not production-ready.
