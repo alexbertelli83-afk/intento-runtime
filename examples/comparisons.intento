@@ -1,0 +1,11 @@
+remember age as 20
+
+if age is at least 18:
+    show "Access allowed"
+else:
+    show "Access denied"
+
+if age is greater than 30:
+    show "Over 30"
+else:
+    show "30 or younger"

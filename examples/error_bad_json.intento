@@ -1,0 +1,4 @@
+# Expected: JSON error
+use library "json"
+use action "json.get" with "{bad json}" and "name" and call the result name
+show name

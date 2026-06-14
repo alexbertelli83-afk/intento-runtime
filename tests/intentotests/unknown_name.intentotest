@@ -1,0 +1,5 @@
+name: unknown name error
+program: examples/error_unknown_name.intento
+expect error:
+Semantic error on line 1: unknown name `unknown_value`
+end

@@ -1,0 +1,12 @@
+# INTENTO Runtime 0.4 text library example
+use library "text"
+
+remember title as "  Human Readable Code  "
+
+use action "text.trim" with title and call the result clean_title
+use action "text.slugify" with clean_title and call the result slug
+use action "text.count_words" with clean_title and call the result words
+
+show clean_title
+show slug
+show words

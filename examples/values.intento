@@ -1,0 +1,6 @@
+show "INTENTO"
+show 42
+show true
+show false
+show empty
+show ["Linux", "Python", "INTENTO"]

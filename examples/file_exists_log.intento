@@ -1,0 +1,12 @@
+# INTENTO Runtime 0.4 file helper and log example
+use library "file"
+use library "log"
+
+use action "file.exists" with "examples/data/notes.txt" and call the result exists
+
+if exists is true:
+    use action "log.info" with "notes file exists"
+    show "notes.txt exists"
+else:
+    use action "log.warning" with "notes file missing"
+    show "notes.txt missing"

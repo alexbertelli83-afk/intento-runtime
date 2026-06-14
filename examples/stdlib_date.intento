@@ -1,0 +1,10 @@
+# INTENTO Runtime 0.8 date library example
+use library "date"
+
+remember raw_date as "2026-06-13"
+
+use action "date.format" with raw_date and "long" and call the result long_date
+use action "date.add_days" with raw_date and 7 and call the result next_week
+
+show long_date
+show next_week

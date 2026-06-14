@@ -1,0 +1,4 @@
+remember skills as ["Linux", "Python", "INTENTO"]
+
+for each skill in skills:
+    show skill

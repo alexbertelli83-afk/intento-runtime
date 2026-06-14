@@ -1,0 +1,4 @@
+# Expected: Date error
+use library "date"
+use action "date.format" with "not-a-date" and "long" and call the result readable
+show readable

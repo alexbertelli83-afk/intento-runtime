@@ -1,0 +1,2 @@
+ask "What is your name?" and call the answer name
+show "Hello " plus name

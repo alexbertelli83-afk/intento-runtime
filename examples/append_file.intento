@@ -1,0 +1,5 @@
+# Append to an existing file with confirmation
+with confirmation:
+    append to file "examples/data/notes.txt" with "\nAppended by INTENTO"
+
+show "Append complete"

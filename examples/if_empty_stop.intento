@@ -1,0 +1,9 @@
+remember name as empty
+
+if name is empty:
+    show "Name is required"
+    stop
+else:
+    show "Hello " plus name
+
+show "This line does not run"

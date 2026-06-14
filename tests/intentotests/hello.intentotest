@@ -1,0 +1,5 @@
+name: hello output
+program: examples/hello.intento
+expect output:
+Hello from INTENTO
+end

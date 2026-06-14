@@ -1,0 +1,2 @@
+read file "/system/private.txt" and call it secret
+show secret

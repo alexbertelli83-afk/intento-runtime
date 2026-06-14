@@ -1,0 +1,4 @@
+to greet with name:
+    show "Hello " plus name
+
+greet with "Aurora"

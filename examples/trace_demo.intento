@@ -1,0 +1,5 @@
+# INTENTO Runtime 0.8 trace example
+use library "text"
+remember title as "Human Readable Code"
+use action "text.slugify" with title and call the result slug
+show slug

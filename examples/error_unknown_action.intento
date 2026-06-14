@@ -1,0 +1,3 @@
+use library "text"
+use action "text.unknown" with "Hello" and call the result value
+show value

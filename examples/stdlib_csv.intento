@@ -1,0 +1,10 @@
+# INTENTO Runtime 0.8 CSV library example
+use library "csv"
+
+remember rows as "name,role\nAda,mathematician\nGrace,computer scientist"
+
+use action "csv.count_rows" with rows and call the result count
+use action "csv.get_column" with rows and "name" and call the result names
+
+show count
+show names

@@ -1,0 +1,3 @@
+# Read a file inside the workspace
+read file "examples/data/notes.txt" and call it notes
+show notes

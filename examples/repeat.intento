@@ -1,0 +1,5 @@
+remember counter as 0
+
+repeat 3 times:
+    remember counter as counter plus 1
+    show counter

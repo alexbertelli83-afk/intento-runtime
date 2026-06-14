@@ -1,0 +1,6 @@
+# Create a folder and a file with confirmation
+with confirmation:
+    create folder "examples/output/demo"
+    create file "examples/output/demo/README.txt" with "# INTENTO demo"
+
+show "Created demo project"

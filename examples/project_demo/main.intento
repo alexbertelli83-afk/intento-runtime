@@ -1,0 +1,7 @@
+use library "text"
+use module "modules/formatting.intento" as formatting
+
+remember title as "Project Demo"
+use action "text.slugify" with title and call the result slug
+formatting.show_title with title
+show slug

@@ -1,0 +1,14 @@
+# INTENTO Runtime 0.4 list and number library example
+use library "list"
+use library "number"
+
+remember skills as ["Linux", "Python", "INTENTO"]
+remember value as -12
+
+use action "list.count" with skills and call the result total
+use action "list.join" with skills and ", " and call the result joined
+use action "number.absolute" with value and call the result positive
+
+show joined
+show total
+show positive

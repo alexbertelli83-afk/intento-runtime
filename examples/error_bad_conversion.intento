@@ -1,0 +1,4 @@
+# INTENTO Runtime 0.8 conversion error example
+remember value as "forty-two"
+convert value to number and call it number_value
+show number_value

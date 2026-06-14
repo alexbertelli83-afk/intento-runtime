@@ -1,0 +1,2 @@
+with confirmation:
+    create file "examples/data/notes.txt" with "replacement"

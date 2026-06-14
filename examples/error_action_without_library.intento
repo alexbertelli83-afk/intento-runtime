@@ -1,0 +1,2 @@
+use action "text.slugify" with "Hello" and call the result slug
+show slug

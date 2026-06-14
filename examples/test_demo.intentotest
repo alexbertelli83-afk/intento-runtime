@@ -1,0 +1,7 @@
+name: slugify demo
+program: examples/stdlib_text.intento
+expect output:
+Human Readable Code
+human-readable-code
+3
+end

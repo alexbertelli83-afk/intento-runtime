@@ -1,0 +1,11 @@
+# INTENTO Runtime 0.8 convert example
+remember age_text as "42"
+convert age_text to number and call it age
+show age plus 1
+
+remember active_text as "true"
+convert active_text to boolean and call it active
+show active
+
+convert age to text and call it age_label
+show "Age: " plus age_label

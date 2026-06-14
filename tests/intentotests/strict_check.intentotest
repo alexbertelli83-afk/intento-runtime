@@ -1,0 +1,13 @@
+name: strict check with trace
+program: examples/strict_check_demo.intento
+mode: check
+strict: true
+trace: true
+show_logs: true
+expect output:
+Human Readable Code
+-- Runtime log --
+TRACE line 2: Remember
+TRACE line 3: Show
+Strict check passed.
+end

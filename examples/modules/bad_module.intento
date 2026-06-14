@@ -1,0 +1,4 @@
+show "Loaded module"
+
+to greet:
+    show "Hello"

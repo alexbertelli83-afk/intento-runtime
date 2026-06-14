@@ -1,0 +1,5 @@
+remember name as "Aurora"
+show "Hello " plus name
+
+show 10 plus 5
+show (2 plus 3) times 4

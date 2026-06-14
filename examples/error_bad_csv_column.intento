@@ -1,0 +1,5 @@
+# Expected: CSV error
+use library "csv"
+remember rows as "name,role\nAda,mathematician"
+use action "csv.get_column" with rows and "age" and call the result ages
+show ages

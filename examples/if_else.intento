@@ -1,0 +1,6 @@
+remember name as "Aurora"
+
+if name is "Aurora":
+    show "Correct"
+else:
+    show "Wrong"

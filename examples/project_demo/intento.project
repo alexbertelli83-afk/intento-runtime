@@ -1,0 +1,5 @@
+runtime: INTENTO 1.0
+entry: main.intento
+libraries: text
+permissions: read project files, write project files with confirmation
+features: modules

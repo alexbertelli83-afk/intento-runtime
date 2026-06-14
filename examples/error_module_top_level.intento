@@ -1,0 +1,1 @@
+use module "examples/modules/bad_module.intento"

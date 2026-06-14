@@ -1,0 +1,6 @@
+# Dry-run example: no files should be modified
+with confirmation:
+    create folder "examples/output/dry-run-demo"
+    create file "examples/output/dry-run-demo/README.txt" with "# Dry run"
+
+show "Dry run finished"

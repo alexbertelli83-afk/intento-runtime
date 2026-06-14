@@ -1,0 +1,12 @@
+# INTENTO Runtime 0.8 JSON library example
+use library "json"
+
+remember data as "{\"name\":\"Aurora\",\"language\":\"INTENTO\"}"
+
+use action "json.get" with data and "name" and call the result name
+use action "json.get" with data and "language" and call the result language
+use action "json.has_key" with data and "language" and call the result has_language
+
+show name
+show language
+show has_language

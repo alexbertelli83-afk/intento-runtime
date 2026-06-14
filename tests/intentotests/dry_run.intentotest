@@ -1,0 +1,8 @@
+name: dry-run project
+program: examples/dry_run_project.intento
+mode: dry-run
+expect output:
+DRY RUN: would create folder examples/output/dry-run-demo
+DRY RUN: would create file examples/output/dry-run-demo/README.txt
+Dry run finished
+end
