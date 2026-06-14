@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="INTENTO_logo_square_512.png" alt="INTENTO logo" width="180">
+</p>
+
 # INTENTO Runtime
 
 **Human-readable code. Controlled syntax. Real execution.**
