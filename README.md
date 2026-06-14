@@ -122,6 +122,30 @@ Expected output:
 Hello from INTENTO
 ```
 
+## Practical Demo
+
+A practical INTENTO demo is included in the `examples` folder.
+
+Run it with:
+
+```bash
+python3 -m intento_runtime run examples/demo_pratico.intento
+```
+
+The demo shows how INTENTO can use memory, standard libraries, registered actions, lists, numbers, and conditional logic in a readable program.
+
+Expected output:
+
+```text
+Project: INTENTO Runtime
+Slug: intento-runtime
+Principles: human-readable code | controlled syntax | real execution
+Number of principles: 3
+Safe number: 42
+Runtime practical test: OK
+```
+
+
 ## Run Tests
 
 Run the Python test suite:
