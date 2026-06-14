@@ -1,0 +1,26 @@
+# INTENTO practical demo
+use library "text"
+use library "list"
+use library "number"
+
+remember project as "  INTENTO Runtime  "
+use action "text.trim" with project and call the result clean_project
+use action "text.slugify" with clean_project and call the result slug
+
+remember skills as ["human-readable code", "controlled syntax", "real execution"]
+use action "list.join" with skills and " | " and call the result summary
+use action "list.count" with skills and call the result total
+
+remember value as -42
+use action "number.absolute" with value and call the result positive
+
+show "Project: " plus clean_project
+show "Slug: " plus slug
+show "Principles: " plus summary
+show "Number of principles: " plus total
+show "Safe number: " plus positive
+
+if total is at least 3:
+    show "Runtime practical test: OK"
+else:
+    show "Runtime practical test: incomplete"
