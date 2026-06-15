@@ -204,3 +204,16 @@ INTENTO was ideated by **Alessandro Bertelli**.
 The Runtime source code is released under the MIT License. The manual, project identity, language name, documentation, and related written materials are protected by copyright.
 
 Copyright © 2026 Alessandro Bertelli. All rights reserved.
+
+## Official Manual
+
+The official INTENTO manual is available in the `manual/` folder.
+
+Current manual for Runtime v1.1:
+
+- `manual/INTENTO_Official_Manual_v1.1.pdf`
+- `manual/INTENTO_Official_Manual_v1.1.docx`
+
+The v1.1 manual includes the Runtime v1.1 appendix on controlled Python-backed actions, including project-local Python actions, the `local.` namespace, and the `--allow-python-actions` permission flag.
+
+Previous corrected manual files may remain available for historical reference.
