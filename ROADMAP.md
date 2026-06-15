@@ -2,62 +2,47 @@
 
 ## Completed through v1.0
 
-INTENTO Runtime v1.0 includes the full experimental baseline:
+INTENTO Runtime v1.0 completed the first coherent experimental baseline:
 
-- Core execution
-- Values and expressions
-- Word operators and symbol aliases
-- Conditions and comparisons
-- Repetition and list iteration
-- Explicit conversion
-- File read/write operations with safety rules
-- Workspace sandbox
-- Confirmation and dry-run
-- Standard Library registry
-- Registered actions and metadata
-- Text, number, list, file, log, date, JSON, and CSV libraries
-- Custom actions
-- Modules and aliases
-- Project metadata
-- Project initialization
-- Project packaging
-- Native `.intentotest` testing
-- Runtime diagnostics with `version`, `doctor`, `--trace`, and source-context errors
+- core syntax;
+- values and expressions;
+- conditions and loops;
+- file operations with workspace safety;
+- Standard Library actions;
+- modules and custom actions;
+- project metadata;
+- tests and intentotests;
+- project initialization and packaging.
 
-## Next releases
+## Completed in v1.1
 
-### v1.1 — Language completeness
+Runtime v1.1 adds the first controlled Python extension layer:
 
-Possible additions:
+- project-local Python registered actions;
+- `local.` action namespace;
+- explicit `--allow-python-actions` permission;
+- metadata validation;
+- return-value validation;
+- conservative static safety checks;
+- Python-actions demo project.
 
-- return values from custom actions usable in expressions
-- `and`, `or`, `not`
-- `while` or `repeat until`
-- dictionary / record values
-- stronger type declarations for custom actions
+## Candidate v1.2 work
 
-### v1.2 — Standard Library expansion
+- Better project-action documentation.
+- Optional permission levels for local Python actions.
+- More precise action return types.
+- More example projects.
+- Improved error messages for action metadata.
+- Optional `.intentotest` support for projects requiring Python actions.
+- A safer long-term plugin format.
 
-Possible additions:
+## Long-term ideas
 
-- safer network actions
-- richer file utilities
-- path helpers
-- better date/time handling
-- CSV writing
-- JSON object construction
-
-### v1.3 — Tooling and distribution
-
-Possible additions:
-
-- formatted error reports
-- project templates
-- package metadata validation
-- better install workflow
-- GitHub Actions CI template
-- documentation site skeleton
-
-## Guiding rule
-
-INTENTO should grow carefully. Every feature must stay readable, parseable, predictable, and safe.
+- VS Code syntax highlighting.
+- More Standard Library namespaces.
+- Better package/install workflow.
+- Website or GitHub Pages documentation.
+- Manual examples synchronized with runtime tests.
+- Controlled AI-backed actions.
+- Records/dictionaries as first-class INTENTO values.
+- Custom actions with returned values usable in expressions.

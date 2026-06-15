@@ -13,7 +13,7 @@ from .stdlib import get_action, list_actions, list_libraries
 from .testrunner import format_test_report, run_intento_tests
 
 
-VERSION = "1.0"
+VERSION = "1.1"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -38,6 +38,7 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--yes", action="store_true", help="Automatically confirm confirmation-required operations")
     run.add_argument("--show-logs", action="store_true", help="Print Runtime log entries after program output")
     run.add_argument("--trace", action="store_true", help="Add statement-level trace entries to Runtime logs")
+    run.add_argument("--allow-python-actions", action="store_true", help="Allow project-local Python registered actions from actions/intento_actions.py")
 
     check = sub.add_parser("check", help="Parse/check an .intento source file or project folder without showing program output")
     check.add_argument("file", help="Path to an .intento file or project folder")
@@ -45,12 +46,14 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--strict", action="store_true", help="Run a dry semantic check with safe defaults instead of parse-only check")
     check.add_argument("--show-logs", action="store_true", help="Print Runtime log entries for strict checks")
     check.add_argument("--trace", action="store_true", help="Add statement-level trace entries during strict checks")
+    check.add_argument("--allow-python-actions", action="store_true", help="Allow project-local Python registered actions during strict checks")
 
     dry_run = sub.add_parser("dry-run", help="Show confirmation-required operations without modifying files")
     dry_run.add_argument("file", help="Path to an .intento file or project folder")
     dry_run.add_argument("--workspace", help="Allowed workspace folder for file operations")
     dry_run.add_argument("--show-logs", action="store_true", help="Print Runtime log entries after program output")
     dry_run.add_argument("--trace", action="store_true", help="Add statement-level trace entries to Runtime logs")
+    dry_run.add_argument("--allow-python-actions", action="store_true", help="Allow project-local Python registered actions from actions/intento_actions.py")
 
     describe = sub.add_parser("describe", help="Describe a registered action")
     describe_sub = describe.add_subparsers(dest="describe_kind", required=True)
@@ -190,6 +193,7 @@ def main(argv: list[str] | None = None) -> int:
                 confirm_func=lambda description: True,
                 input_func=lambda question: "",
                 trace=args.trace,
+                allow_python_actions=args.allow_python_actions,
             )
             if args.strict:
                 result = runtime.run_source(source)
@@ -201,14 +205,14 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         if args.command == "dry-run":
-            runtime = IntentoRuntime(workspace=workspace, dry_run=True, confirm_func=lambda description: True, trace=args.trace)
+            runtime = IntentoRuntime(workspace=workspace, dry_run=True, confirm_func=lambda description: True, trace=args.trace, allow_python_actions=args.allow_python_actions)
             result = runtime.run_source(source)
             print_result(result, show_logs=args.show_logs)
             return 0
 
         if args.command == "run":
             confirm_func = (lambda description: True) if args.yes else interactive_confirm
-            runtime = IntentoRuntime(workspace=workspace, confirm_func=confirm_func, trace=args.trace)
+            runtime = IntentoRuntime(workspace=workspace, confirm_func=confirm_func, trace=args.trace, allow_python_actions=args.allow_python_actions)
             result = runtime.run_source(source)
             print_result(result, show_logs=args.show_logs)
             return 0

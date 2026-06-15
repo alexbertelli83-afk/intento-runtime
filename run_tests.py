@@ -450,6 +450,90 @@ def run_project_init_package_tests() -> int:
     return failed
 
 
+
+def run_python_actions_tests() -> int:
+    failed = 0
+    with TemporaryDirectory() as tmp:
+        workspace = Path(tmp)
+        actions_dir = workspace / 'actions'
+        actions_dir.mkdir()
+        (actions_dir / 'intento_actions.py').write_text(
+            'def clean_title(value):\n'
+            '    return value.strip().replace("!!!", "").strip()\n\n'
+            'def count_letters(value):\n'
+            '    return len(value.replace(" ", ""))\n\n'
+            'ACTIONS = {\n'
+            '    "local.clean_title": {\n'
+            '        "accepts": ["text"],\n'
+            '        "returns": "text",\n'
+            '        "safety": "project-python",\n'
+            '        "description": "Cleans a project title.",\n'
+            '        "function": clean_title,\n'
+            '    },\n'
+            '    "local.count_letters": {\n'
+            '        "accepts": ["text"],\n'
+            '        "returns": "number",\n'
+            '        "safety": "project-python",\n'
+            '        "description": "Counts letters except spaces.",\n'
+            '        "function": "count_letters",\n'
+            '    },\n'
+            '}\n',
+            encoding='utf-8',
+        )
+        source = (
+            'use library "local"\n'
+            'remember title as "  INTENTO Runtime v1.1 !!!  "\n'
+            'use action "local.clean_title" with title and call the result clean\n'
+            'use action "local.count_letters" with clean and call the result letters\n'
+            'show clean\n'
+            'show letters\n'
+        )
+        try:
+            result = run_source(source, workspace=workspace, allow_python_actions=True)
+            expected = ['INTENTO Runtime v1.1', '18']
+            if result.output != expected:
+                failed += 1
+                print(f'FAIL python actions: expected {expected}, got {result.output}')
+            else:
+                print('OK   python actions')
+        except IntentoError as exc:
+            failed += 1
+            print(f'FAIL python actions: {exc}')
+
+        try:
+            run_source('use library "local"', workspace=workspace)
+        except IntentoLibraryError:
+            print('OK   python actions require explicit flag')
+        except IntentoError as exc:
+            failed += 1
+            print(f'FAIL python actions flag: expected IntentoLibraryError, got {type(exc).__name__}: {exc}')
+        else:
+            failed += 1
+            print('FAIL python actions flag: expected IntentoLibraryError')
+
+    with TemporaryDirectory() as tmp:
+        workspace = Path(tmp)
+        actions_dir = workspace / 'actions'
+        actions_dir.mkdir()
+        (actions_dir / 'intento_actions.py').write_text(
+            'import os\n\n'
+            'def bad(value):\n'
+            '    return value\n\n'
+            'ACTIONS = {"local.bad": {"accepts": ["text"], "returns": "text", "function": bad}}\n',
+            encoding='utf-8',
+        )
+        try:
+            run_source('use library "local"', workspace=workspace, allow_python_actions=True)
+        except IntentoSafetyError:
+            print('OK   python actions blocked forbidden import')
+        except IntentoError as exc:
+            failed += 1
+            print(f'FAIL python actions safety: expected IntentoSafetyError, got {type(exc).__name__}: {exc}')
+        else:
+            failed += 1
+            print('FAIL python actions safety: expected IntentoSafetyError')
+    return failed
+
 def main():
     failed = run_memory_tests()
     failed += run_file_tests()
@@ -459,6 +543,7 @@ def main():
     failed += run_dev_polish_tests()
     failed += run_intentotest_tests()
     failed += run_project_init_package_tests()
+    failed += run_python_actions_tests()
     if failed:
         raise SystemExit(1)
     print('All tests passed.')

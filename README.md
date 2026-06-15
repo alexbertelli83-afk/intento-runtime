@@ -1,235 +1,206 @@
-<p align="center">
-  <img src="INTENTO_logo_square_512.png" alt="INTENTO logo" width="180">
-</p>
-
-# INTENTO Runtime
+# INTENTO Runtime v1.1
 
 **Human-readable code. Controlled syntax. Real execution.**
 
-INTENTO is an experimental human-readable programming language designed to express software instructions in a form that is close to human intention while remaining structured, deterministic, and executable.
+INTENTO is an experimental human-readable programming language with an Italian name, English syntax, and a practical goal: express software instructions in a form that is close to human intention while remaining deterministic, parseable, testable, and safe to execute.
 
-This repository contains **INTENTO Runtime v1.0.0**, the first validated experimental release of the INTENTO interpreter.
+**INTENTO Runtime v1.1** extends the validated v1.0 baseline with **project-local Python registered actions**. This means INTENTO can now use Python as a backend power layer without allowing raw Python code inside `.intento` source files.
 
-## What is INTENTO?
-
-INTENTO is not a toy syntax experiment and it is not a replacement for mature programming languages such as Python.
-
-It is an experimental language layer focused on a simple idea:
-
-> programming should become more readable without becoming ambiguous.
-
-INTENTO source code is written in `.intento` files and executed by a controlled Runtime. The language favors readable instructions such as `show`, `remember`, `ask`, `if`, `repeat`, `for each`, `use library`, and `use action`.
-
-The goal is to make code easier to read, write, explain, and audit, while preserving clear execution rules.
-
-## Example
-
-```intento
-remember "Alessandro" as name
-show "Hello, " plus name
-```
-
-Expected output:
+The rule is simple:
 
 ```text
-Hello, Alessandro
+INTENTO source stays readable and controlled.
+Python power is exposed only through registered actions.
 ```
 
-Another example:
+## What v1.1 adds
 
-```intento
-remember 5 as number
+Runtime v1.1 adds an explicit bridge between INTENTO and Python:
 
-if number is greater than 3
-    show "The number is greater than 3"
-else
-    show "The number is small"
-```
+- project-local Python action file: `actions/intento_actions.py`
+- `local.` namespace for project actions
+- explicit CLI permission: `--allow-python-actions`
+- action metadata: accepted types, return type, safety level, description, function
+- return-value validation for Python-backed actions
+- conservative static safety checks before importing project action files
+- blocking of dangerous imports such as `os`, `subprocess`, `socket`, `shutil`, `sys`, and similar modules
+- blocking of dangerous calls such as `eval`, `exec`, `compile`, `open`, `input`, and `__import__`
 
-Expected output:
+This is not a full Python sandbox. It is a controlled Runtime layer designed for small, explicit, project-local actions.
 
-```text
-The number is greater than 3
-```
+## What v1.0 already included
 
-## Main Features
+The v1.0 baseline remains intact:
 
-INTENTO Runtime v1.0.0 includes:
+- execution of `.intento` programs
+- `show`, `remember`, `ask`
+- values: text, number, boolean, empty, list
+- word operators: `plus`, `minus`, `times`, `divided by`
+- optional symbol aliases: `+`, `-`, `*`, `/`
+- conditions, comparisons, `if` / `else`
+- `repeat` and `for each`
+- controlled file operations
+- workspace sandbox
+- confirmation-required writes
+- dry-run mode
+- Standard Library namespaces: `text`, `number`, `list`, `file`, `log`, `date`, `json`, `csv`
+- registered actions with metadata
+- custom INTENTO actions
+- modules
+- project metadata with `intento.project`
+- `.intentotest` files
+- project initialization and packaging
+- `version`, `doctor`, `check`, `trace`, and source-context errors
 
-* execution of `.intento` programs
-* readable instructions for memory, output, input, conditions, loops, and lists
-* word-based operators such as `plus`, `minus`, `times`, and `divided by`
-* optional symbolic operator aliases
-* controlled filesystem operations
-* workspace safety rules
-* standard libraries
-* registered actions
-* custom actions
-* modules
-* project structure support
-* `.intentotest` testing files
-* project initialization
-* project packaging
-* runtime diagnostics with `version` and `doctor`
-* trace and strict check modes
+## Quick start
 
-## Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/alexbertelli83-afk/intento-runtime.git
-cd intento-runtime
-```
-
-Optional: create a virtual environment:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-Install the Runtime locally:
-
-```bash
-pip install -e .
-```
-
-Check the installation:
-
-```bash
-python3 -m intento_runtime version
-python3 -m intento_runtime doctor
-```
-
-## Run an INTENTO Program
-
-Create a file named `hello.intento`:
-
-```intento
-show "Hello from INTENTO"
-```
-
-Run it:
-
-```bash
-python3 -m intento_runtime run hello.intento
-```
-
-Expected output:
-
-```text
-Hello from INTENTO
-```
-
-## Practical Demo
-
-A practical INTENTO demo is included in the `examples` folder.
-
-Run it with:
-
-```bash
-python3 -m intento_runtime run examples/demo_pratico.intento
-```
-
-The demo shows how INTENTO can use memory, standard libraries, registered actions, lists, numbers, and conditional logic in a readable program.
-
-Expected output:
-
-```text
-Project: INTENTO Runtime
-Slug: intento-runtime
-Principles: human-readable code | controlled syntax | real execution
-Number of principles: 3
-Safe number: 42
-Runtime practical test: OK
-```
-
-
-## Run Tests
-
-Run the Python test suite:
+From the project folder:
 
 ```bash
 python3 run_tests.py
-```
-
-Run INTENTO test files:
-
-```bash
+python3 -m intento_runtime version
+python3 -m intento_runtime doctor
 python3 -m intento_runtime test tests/intentotests
 ```
 
-## Project Workflow
-
-INTENTO Runtime can initialize and package projects.
-
-Create a new project:
+Run simple examples:
 
 ```bash
-python3 -m intento_runtime init my_project
+python3 -m intento_runtime run examples/hello.intento
+python3 -m intento_runtime run examples/if_else.intento
+python3 -m intento_runtime run examples/stdlib_text.intento
+python3 -m intento_runtime run examples/project_demo --show-logs
 ```
 
-Run the project:
+Run the v1.1 Python-actions demo:
 
 ```bash
-python3 -m intento_runtime run my_project
+python3 -m intento_runtime run examples/python_actions_demo --allow-python-actions
 ```
 
-Check the project:
-
-```bash
-python3 -m intento_runtime check my_project
-```
-
-Package the project:
-
-```bash
-python3 -m intento_runtime package my_project --output my_project.zip
-```
-
-## Official Manual
-
-The official manual is included in this repository and in the v1.0.0 release assets:
-
-* `INTENTO_Official_Manual_corrected.pdf`
-* `INTENTO_Official_Manual_corrected.docx`
-
-The manual explains the language idea, execution model, syntax, runtime behavior, standard library, project format, and implementation rules.
-
-## Release
-
-The first experimental release is available here:
+Expected output:
 
 ```text
-INTENTO Runtime v1.0.0 — Experimental Prototype
+INTENTO Runtime v1.1
+INTENTO RUNTIME V1.1!
 ```
 
-It includes:
+## Python-backed actions
 
-* Runtime source code
-* `intento-runtime-v10.zip`
-* official manual in PDF format
-* official manual in DOCX format
+A project-local Python action lives in:
+
+```text
+actions/intento_actions.py
+```
+
+Example Python action file:
+
+```python
+def clean_title(value):
+    return value.strip().replace('!!!', '').strip()
+
+
+ACTIONS = {
+    'local.clean_title': {
+        'accepts': ['text'],
+        'returns': 'text',
+        'safety': 'project-python',
+        'description': 'Cleans an INTENTO project title using project-local Python.',
+        'function': clean_title,
+    },
+}
+```
+
+The INTENTO program stays readable:
+
+```intento
+use library "local"
+
+remember title as "  INTENTO Runtime v1.1 !!!  "
+use action "local.clean_title" with title and call the result clean_title
+
+show clean_title
+```
+
+Run it with explicit permission:
+
+```bash
+python3 -m intento_runtime run project_folder --allow-python-actions
+```
+
+Without `--allow-python-actions`, the `local` library is not available.
+
+## Safety model
+
+Raw shell execution and raw Python code inside `.intento` source are still blocked.
+
+Python-backed power is allowed only when all of these are true:
+
+1. the action is declared in `actions/intento_actions.py`;
+2. the action name uses the `local.` namespace;
+3. the INTENTO program loads `use library "local"`;
+4. the user runs the Runtime with `--allow-python-actions`;
+5. the action file passes conservative static safety checks;
+6. the action returns an INTENTO-compatible value.
+
+This keeps INTENTO human-readable while allowing controlled access to Python-backed capability.
+
+## Project metadata
+
+A standard INTENTO v1.1 project contains an `intento.project` file:
+
+```text
+runtime: INTENTO 1.1
+entry: main.intento
+libraries: text
+permissions: read project files, write project files with confirmation
+features: modules, symbol operators, intentotests
+```
+
+A project that uses local Python actions may declare:
+
+```text
+runtime: INTENTO 1.1
+entry: main.intento
+libraries: local
+permissions: project-local Python actions only when explicitly enabled
+features: local python actions, registered actions
+```
+
+## Optional editable install
+
+The Runtime can be installed in editable mode from this folder:
+
+```bash
+python3 -m pip install -e .
+```
+
+Then the CLI command becomes available as:
+
+```bash
+intento version
+intento doctor
+intento run examples/hello.intento
+```
+
+Using `python3 -m intento_runtime ...` remains fully supported.
+
+## Current limitation
+
+Runtime v1.1 can call registered Python-backed actions, but it does not execute arbitrary Python source from INTENTO programs. That is intentional.
+
+Custom INTENTO actions are executable statements. The Runtime parses `return`, but returned values from custom INTENTO actions are not yet consumable inside expressions. That belongs to a future release.
 
 ## Status
 
-INTENTO Runtime v1.0.0 is an experimental prototype.
-
-It has been validated locally on Ubuntu and is suitable for study, experimentation, language design exploration, and controlled prototyping.
+INTENTO Runtime v1.1 is an experimental prototype. It is suitable for study, controlled prototyping, language design exploration, and small local automation experiments.
 
 It is not production-ready.
 
-## Ideator and Authorship
+## Ideator and copyright
 
 INTENTO was ideated by **Alessandro Bertelli**.
 
-The project has been developed with AI-assisted support for prototyping, documentation, and implementation, while the original concept, direction, and authorship belong to Alessandro Bertelli.
-
-## License and Copyright
-
-The Runtime source code is released under the MIT License.
-
-The official manual, project identity, language name, documentation, and related written materials are protected by copyright.
+The Runtime source code is released under the MIT License. The manual, project identity, language name, documentation, and related written materials are protected by copyright.
 
 Copyright © 2026 Alessandro Bertelli. All rights reserved.

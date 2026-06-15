@@ -1,0 +1,8 @@
+use library "local"
+
+remember title as "  INTENTO Runtime v1.1 !!!  "
+use action "local.clean_title" with title and call the result clean_title
+use action "local.emphasize" with clean_title and call the result announcement
+
+show clean_title
+show announcement

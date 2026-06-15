@@ -1,50 +1,59 @@
-# INTENTO Runtime v1.0 Release Notes
+# INTENTO Runtime v1.1 Release Notes
 
-INTENTO Runtime v1.0 is the first complete experimental baseline of the INTENTO language implementation.
+INTENTO Runtime v1.1 is the first experimental extension release after the validated v1.0 baseline.
 
-It is suitable for local experimentation, documentation, demos, and careful public sharing as an early open-source prototype.
+The main feature is **project-local Python registered actions**.
 
-It should not yet be presented as production software.
+## Main idea
 
-## Highlights
+INTENTO should remain readable and controlled. Python should be a backend power layer, not free code embedded in `.intento` files.
 
-- Human-readable `.intento` programs execute from the CLI.
-- Programs support memory, values, expressions, conditions, loops, files, modules, libraries, and projects.
-- The Runtime includes a controlled Standard Library and registered action system.
-- File writes are protected by confirmation and workspace rules.
-- Projects can be initialized, checked, tested, run, and packaged.
-- Native `.intentotest` files allow expected output and expected error checks.
-- Diagnostics include trace logs, doctor output, strict check mode, and source context for errors.
-
-## Recommended GitHub status
-
-Publish as:
+Runtime v1.1 follows this rule:
 
 ```text
-INTENTO Runtime v1.0 — experimental prototype
+INTENTO does not execute arbitrary Python.
+INTENTO calls named, registered, project-local Python actions.
 ```
 
-Recommended labels:
+## New feature
+
+A project may define actions in:
 
 ```text
-experimental
-prototype
-human-readable programming language
-safe execution
-python runtime
+actions/intento_actions.py
 ```
 
-## Before public release
+The INTENTO source can then use them through the `local.` namespace:
 
-Run:
+```intento
+use library "local"
+use action "local.clean_title" with title and call the result clean_title
+```
+
+The Runtime must be started with explicit permission:
 
 ```bash
-python3 run_tests.py
-python3 -m intento_runtime doctor
-python3 -m intento_runtime test tests/intentotests
-python3 -m intento_runtime init aurora_demo
-python3 -m intento_runtime run aurora_demo --show-logs
-python3 -m intento_runtime package aurora_demo --output aurora_demo.zip
+python3 -m intento_runtime run project_folder --allow-python-actions
 ```
 
-If all commands pass, the local release is ready to archive or publish.
+## Safety behavior
+
+Runtime v1.1 blocks project-local Python actions unless `--allow-python-actions` is present.
+
+It also applies conservative static checks before loading the Python file. This helps keep v1.1 actions small, explicit, and controlled.
+
+This is not a full Python sandbox and should not be treated as production-grade isolation.
+
+## Validation
+
+The full test suite passes, including:
+
+- existing v1.0 behavior;
+- local Python action loading;
+- required explicit permission;
+- blocked forbidden import test;
+- CLI demo execution.
+
+## Status
+
+INTENTO Runtime v1.1 — experimental prototype.

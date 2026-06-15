@@ -1,0 +1,5 @@
+runtime: INTENTO 1.1
+entry: main.intento
+libraries: local
+permissions: project-local Python actions only when explicitly enabled
+features: local python actions, registered actions

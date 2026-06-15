@@ -19,6 +19,7 @@ from .errors import (
 )
 from .expr import evaluate_expression
 from .stdlib import call_action, get_action, get_library
+from .python_actions import load_python_actions
 from .values import format_value, is_number, type_name
 
 _NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
@@ -340,6 +341,7 @@ class IntentoRuntime:
         workspace: str | Path | None = None,
         dry_run: bool = False,
         trace: bool = False,
+        allow_python_actions: bool = False,
     ):
         self.memory: dict[str, object] = {}
         self.output: list[str] = []
@@ -350,6 +352,9 @@ class IntentoRuntime:
         self.input_func = input_func or self._default_input
         self.confirm_func = confirm_func or self._default_confirm
         self.workspace = Path(workspace or Path.cwd()).resolve()
+        self.allow_python_actions = allow_python_actions
+        self.python_actions = load_python_actions(self.workspace) if allow_python_actions else {}
+        self.python_libraries = self._build_python_libraries()
         self.dry_run = dry_run
         self.trace = trace
         self._confirmation_depth = 0
@@ -373,7 +378,7 @@ class IntentoRuntime:
         if line.endswith(':'):
             command = line[:-1].strip().split(' ', 1)[0]
             raise IntentoSyntaxError(
-                f"block command `{command}` is not implemented in INTENTO Runtime 0.8",
+                f"block command `{command}` is not implemented in INTENTO Runtime 1.1",
                 line_no,
             )
 
@@ -426,7 +431,7 @@ class IntentoRuntime:
             return self._parse_append_to_file(line, line_no)
 
         if line.startswith(('delete file', 'overwrite file')):
-            raise IntentoSafetyError('deletion and overwrite are not available in INTENTO Runtime 0.8', line_no)
+            raise IntentoSafetyError('deletion and overwrite are not available in INTENTO Runtime 1.1', line_no)
 
         if line.startswith('return '):
             expr = line[len('return '):].strip()
@@ -440,7 +445,7 @@ class IntentoRuntime:
         if line.startswith(('try', 'on error')):
             first = line.split()[0]
             raise IntentoSyntaxError(
-                f"instruction `{first}` is reserved but not implemented in INTENTO Runtime 0.8",
+                f"instruction `{first}` is reserved but not implemented in INTENTO Runtime 1.1",
                 line_no,
             )
 
@@ -838,7 +843,7 @@ class IntentoRuntime:
             try:
                 self._execute_block(action.body)
             except _ReturnSignal:
-                # Runtime 0.8 supports `return` structurally, but action call statements do not consume return values yet.
+                # Runtime 1.1 supports `return` structurally, but action call statements do not consume return values yet.
                 pass
         finally:
             self._call_depth -= 1
@@ -870,15 +875,30 @@ class IntentoRuntime:
                 self._register_action_definition(statement, prefix=alias)
         self.logs.append(f'Loaded module: {self._display_path(path)}' + (f' as {alias}' if alias else ''))
 
+    def _build_python_libraries(self) -> dict[str, tuple[str, ...]]:
+        libraries: dict[str, list[str]] = {}
+        for action_name in self.python_actions:
+            namespace = action_name.split('.', 1)[0]
+            libraries.setdefault(namespace, []).append(action_name)
+        return {name: tuple(sorted(actions)) for name, actions in libraries.items()}
+
+    def _get_registered_action(self, name: str):
+        return get_action(name) or self.python_actions.get(name)
+
+    def _get_registered_library(self, name: str):
+        return get_library(name) or self.python_libraries.get(name)
+
     def _load_library(self, name: str, version: str | None, line_no: int) -> None:
-        if get_library(name) is None:
+        if self._get_registered_library(name) is None:
+            if name == 'local' and not self.allow_python_actions:
+                raise IntentoLibraryError('library `local` requires --allow-python-actions', line_no)
             raise IntentoLibraryError(f'unknown library `{name}`', line_no)
-        if version is not None and version != '1.0':
+        if version is not None and version not in {'1.0', '1.1'}:
             raise IntentoLibraryError(f'library `{name}` version `{version}` is not available', line_no)
         self.loaded_libraries.add(name)
 
     def _execute_registered_action(self, statement: UseActionStatement) -> None:
-        action = get_action(statement.action_name)
+        action = self._get_registered_action(statement.action_name)
         if action is None:
             raise IntentoSemanticError(f'unknown registered action `{statement.action_name}`', statement.line)
         if action.namespace not in self.loaded_libraries:
@@ -893,7 +913,7 @@ class IntentoRuntime:
             self.memory[statement.result_name] = result
 
     def _describe_action(self, action_name: str, line_no: int) -> None:
-        action = get_action(action_name)
+        action = self._get_registered_action(action_name)
         if action is None:
             raise IntentoSemanticError(f'unknown registered action `{action_name}`', line_no)
         self.output.extend(action.describe())
@@ -1103,6 +1123,7 @@ def run_source(
     workspace: str | Path | None = None,
     dry_run: bool = False,
     trace: bool = False,
+    allow_python_actions: bool = False,
 ) -> RuntimeResult:
     runtime = IntentoRuntime(
         input_func=input_func,
@@ -1110,5 +1131,6 @@ def run_source(
         workspace=workspace,
         dry_run=dry_run,
         trace=trace,
+        allow_python_actions=allow_python_actions,
     )
     return runtime.run_source(source)
